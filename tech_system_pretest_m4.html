@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แบบทดสอบก่อนเรียน | ระบบทางเทคโนโลยี ม.4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#183b78; --blue:#2f80ed; --purple:#7857d8; --ink:#213047;
+  --muted:#6d7a90; --bg:#f4f7ff; --card:#fff; --line:#dbe5f5; --good:#16a06a;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Noto Sans Thai",sans-serif;color:var(--ink);background:
+radial-gradient(circle at 12% 8%,rgba(47,128,237,.12),transparent 28%),
+radial-gradient(circle at 88% 15%,rgba(120,87,216,.12),transparent 30%),
+linear-gradient(135deg,#f7faff,#eef3ff);min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.25;background-image:
+linear-gradient(rgba(47,128,237,.08) 1px,transparent 1px),
+linear-gradient(90deg,rgba(47,128,237,.08) 1px,transparent 1px);background-size:32px 32px}
+.wrap{width:min(900px,94%);margin:auto;padding:24px 0 50px;position:relative;z-index:1}
+.card{background:rgba(255,255,255,.96);border:1px solid rgba(219,229,245,.9);border-radius:24px;box-shadow:0 18px 60px rgba(35,62,120,.12);padding:24px}
+.hero{text-align:center;padding:34px 24px}
+.badge{display:inline-block;padding:7px 13px;border-radius:999px;background:#eaf2ff;color:var(--navy);font-weight:700;font-size:14px}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.18;margin:14px 0 10px;color:#15356d}
+.sub{color:var(--muted);font-size:17px;line-height:1.8}
+.input{width:100%;padding:15px 16px;border:2px solid var(--line);border-radius:14px;font:inherit;font-size:17px;outline:none;margin-top:10px}
+.input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(47,128,237,.10)}
+.btn{border:0;border-radius:14px;padding:14px 20px;font:inherit;font-weight:700;cursor:pointer;min-height:52px;transition:.2s}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--purple));color:white;box-shadow:0 10px 24px rgba(74,102,210,.25)}
+.btn-secondary{background:#eef3fb;color:var(--navy)}
+.btn:hover{transform:translateY(-1px)}
+.full{width:100%}
+.topbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap}
+.name{font-weight:700;color:var(--navy)}
+.timer{font-weight:700;color:var(--purple)}
+.progress{height:11px;background:#e9eef8;border-radius:999px;overflow:hidden;margin:10px 0 20px}
+.progress>div{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));transition:width .3s ease}
+.qmeta{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-weight:700;margin-bottom:12px}
+.qtext{font-size:clamp(20px,3.4vw,26px);font-weight:800;line-height:1.55;margin:8px 0 18px}
+.choices{display:grid;gap:12px}
+.choice{display:flex;gap:13px;align-items:flex-start;text-align:left;width:100%;padding:15px;border-radius:16px;border:2px solid #e3e9f3;background:#fff;color:var(--ink);font:inherit;font-size:17px;cursor:pointer;transition:.18s;min-height:56px}
+.choice:hover{border-color:#b8c9eb;background:#f9fbff}
+.choice.selected{border-color:var(--purple);background:#f5f1ff;box-shadow:0 0 0 3px rgba(120,87,216,.08)}
+.num{width:34px;height:34px;flex:0 0 34px;border-radius:10px;display:grid;place-items:center;background:#edf2fb;color:var(--navy);font-weight:800}
+.choice.selected .num{background:var(--purple);color:#fff}
+.navbuttons{display:flex;justify-content:space-between;gap:12px;margin-top:20px}
+.navigator{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.navgrid{display:grid;grid-template-columns:repeat(10,1fr);gap:8px}
+.nbtn{border:0;border-radius:9px;padding:8px 0;background:#edf1f6;color:#647188;font-weight:700;cursor:pointer}
+.nbtn.done{background:#dceaff;color:#235aaf}.nbtn.current{background:var(--purple);color:#fff}
+.illustration{margin:12px auto 20px;border:1px solid var(--line);border-radius:18px;background:#f8fbff;padding:12px;overflow:hidden}
+.illustration svg{width:100%;height:auto;display:block}
+.modal{position:fixed;inset:0;background:rgba(18,30,60,.45);display:none;place-items:center;z-index:20;padding:18px}
+.modal.show{display:grid}.modalbox{width:min(480px,100%);background:#fff;border-radius:20px;padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.22)}
+.result{text-align:center}
+.scoreRing{width:190px;height:190px;border-radius:50%;margin:18px auto;display:grid;place-items:center;background:conic-gradient(var(--blue) var(--pct),#e7edf7 0);position:relative}
+.scoreRing:after{content:"";position:absolute;width:148px;height:148px;background:white;border-radius:50%}
+.scoreText{position:relative;z-index:2}.scoreText strong{display:block;font-size:44px;color:var(--navy)}.scoreText span{color:var(--muted)}
+.resultName{font-size:22px;font-weight:800;color:var(--navy)}
+.resultCard{max-width:640px;margin:auto}
+.resultInfo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.info{padding:13px;background:#f5f8fd;border-radius:14px}.info b{display:block;color:var(--navy)}
+.note{font-size:14px;color:var(--muted);margin-top:16px}
+.hidden{display:none!important}
+@media(max-width:620px){
+  .wrap{width:94%;padding-top:14px}.card{padding:18px;border-radius:20px}.hero{padding:26px 18px}
+  .navgrid{grid-template-columns:repeat(8,1fr)} .choice{font-size:16px;padding:13px}
+  .resultInfo{grid-template-columns:1fr}.navbuttons .btn{flex:1}
+}
+body.screenshot .wrap{width:min(640px,94%);padding-top:18px}
+body.screenshot .no-shot{display:none!important}
+body.screenshot .resultCard{box-shadow:none;border:2px solid #e1e8f5}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section id="start" class="card hero">
+    <div class="badge">PRE-TEST • ม.4</div>
+    <h1>แบบทดสอบก่อนเรียน<br>หน่วยที่ 1 ระบบทางเทคโนโลยี</h1>
+    <div class="sub">รายวิชา เทคโนโลยี (การออกแบบและเทคโนโลยี)<br>จำนวน 40 ข้อ • คะแนนเต็ม 40 คะแนน</div>
+    <div style="max-width:560px;margin:26px auto 0;text-align:left">
+      <label><b>ชื่อ–สกุล</b></label>
+      <input id="studentName" class="input" placeholder="กรอกชื่อ–สกุลของนักเรียน" autocomplete="name">
+      <p class="note">คำชี้แจง: เลือกคำตอบที่ถูกต้องที่สุดเพียงข้อเดียว</p>
+      <button id="startBtn" class="btn btn-primary full">เริ่มทำแบบทดสอบ</button>
+    </div>
+  </section>
+
+  <section id="quiz" class="hidden">
+    <div class="topbar">
+      <div class="name" id="topName"></div>
+      <div class="timer" id="timer">เวลา 00:00</div>
+    </div>
+    <div class="card">
+      <div class="qmeta"><span id="qcount"></span><span id="pct"></span></div>
+      <div class="progress"><div id="bar"></div></div>
+      <div id="imageBox"></div>
+      <div class="qtext" id="qtext"></div>
+      <div id="choices" class="choices"></div>
+      <div class="navbuttons">
+        <button id="prevBtn" class="btn btn-secondary">← ย้อนกลับ</button>
+        <button id="nextBtn" class="btn btn-primary">ถัดไป →</button>
+      </div>
+      <div class="navigator">
+        <div style="font-weight:700;margin-bottom:10px">สถานะคำตอบ</div>
+        <div id="navgrid" class="navgrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="result" class="hidden">
+    <div class="card result resultCard">
+      <div class="badge">✓ ส่งแบบทดสอบเรียบร้อย</div>
+      <h1 style="font-size:30px">แบบทดสอบก่อนเรียน<br>หน่วยที่ 1 ระบบทางเทคโนโลยี</h1>
+      <div class="resultName" id="resultName"></div>
+      <div class="scoreRing" id="scoreRing">
+        <div class="scoreText"><strong id="scoreMain"></strong><span id="percentMain"></span></div>
+      </div>
+      <div id="levelText" style="font-size:22px;font-weight:800;color:var(--purple)"></div>
+      <div class="resultInfo">
+        <div class="info"><b>วันที่และเวลา</b><span id="submittedAt"></span></div>
+        <div class="info"><b>ใช้เวลา</b><span id="duration"></span></div>
+      </div>
+      <p class="note">ผลการทดสอบนี้ใช้สำรวจความรู้ก่อนเรียน ไม่ใช่การตัดสินผลการเรียน</p>
+      <div class="no-shot" style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+        <button id="shotBtn" class="btn btn-primary" style="flex:1">แสดงผลเต็มจอสำหรับแคป</button>
+        <button id="restartBtn" class="btn btn-secondary" style="flex:1">เริ่มใหม่</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="modal" class="modal">
+  <div class="modalbox">
+    <h2 id="modalTitle" style="margin-top:0;color:var(--navy)"></h2>
+    <div id="modalBody" style="line-height:1.7"></div>
+    <div id="modalActions" style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px"></div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [{"id": 1, "q": "ข้อใดอธิบายความหมายของ “เทคโนโลยี” ได้เหมาะสมที่สุด", "choices": ["ความรู้ที่ใช้ศึกษาปรากฏการณ์ต่าง ๆ ที่เกิดขึ้นตามธรรมชาติ", "สิ่งหรือวิธีการที่มนุษย์พัฒนาขึ้นเพื่อแก้ปัญหาและสนองความต้องการ", "เครื่องใช้ไฟฟ้าและอุปกรณ์ดิจิทัลที่มีระบบควบคุมอัตโนมัติ", "กระบวนการผลิตเครื่องจักรขนาดใหญ่เพื่อใช้งานในภาคอุตสาหกรรม"], "a": 2}, {"id": 2, "q": "ข้อใดเป็นตัวอย่างของเทคโนโลยีที่อยู่ในรูปของ “กระบวนการหรือวิธีการ”", "choices": ["เครื่องกรองน้ำสำหรับใช้ภายในบ้าน", "โทรศัพท์มือถือสำหรับติดต่อสื่อสาร", "เครื่องสูบน้ำพลังงานแสงอาทิตย์", "วิธีการถนอมอาหารด้วยการทำให้แห้ง"], "a": 4}, {"id": 3, "q": "เหตุผลสำคัญที่สุดที่มนุษย์พัฒนาเทคโนโลยีขึ้นมาคือข้อใด", "choices": ["เพื่อแก้ปัญหาและตอบสนองความต้องการของมนุษย์", "เพื่อทำให้เครื่องจักรทุกชนิดสามารถทำงานแทนมนุษย์", "เพื่อให้เกิดการแข่งขันด้านการผลิตระหว่างประเทศมากขึ้น", "เพื่อเปลี่ยนทรัพยากรธรรมชาติให้เป็นผลิตภัณฑ์ให้ได้มากที่สุด"], "a": 1}, {"id": 4, "q": "ข้อใดแสดงให้เห็นว่าเทคโนโลยีสามารถเปลี่ยนแปลงไปตามความต้องการของมนุษย์", "choices": ["การใช้โทรศัพท์เครื่องเดิมติดต่อสื่อสารเป็นเวลาหลายปี", "การใช้จักรยานแทนรถยนต์เพื่อเดินทางในระยะทางใกล้", "การพัฒนาหลอดไส้เป็นหลอด LED ที่ประหยัดพลังงานมากขึ้น", "การเลือกใช้เครื่องมือชนิดเดียวกันสำหรับงานทุกประเภท"], "a": 3}, {"id": 5, "q": "ข้อใดเป็นปัจจัยสำคัญที่ผลักดันให้เกิดการพัฒนาเทคโนโลยี", "choices": ["ปัญหา ความต้องการ และข้อจำกัดในการดำรงชีวิตของมนุษย์", "การเพิ่มจำนวนผลิตภัณฑ์ชนิดเดิมโดยไม่เปลี่ยนรูปแบบการใช้งาน", "การใช้ทรัพยากรให้มากที่สุดโดยไม่คำนึงถึงผลกระทบที่เกิดขึ้น", "การลดบทบาทของความรู้ด้านวิทยาศาสตร์และคณิตศาสตร์ในการผลิต"], "a": 1}, {"id": 6, "q": "ข้อใดกล่าวถึงความสัมพันธ์ระหว่างวิทยาศาสตร์กับเทคโนโลยีได้ถูกต้องที่สุด", "choices": ["วิทยาศาสตร์และเทคโนโลยีเป็นศาสตร์เดียวกันและมีเป้าหมายเหมือนกัน", "ความรู้ทางวิทยาศาสตร์สามารถนำมาประยุกต์ใช้ในการพัฒนาเทคโนโลยี", "เทคโนโลยีสามารถพัฒนาได้โดยไม่จำเป็นต้องใช้ความรู้ทางวิทยาศาสตร์", "วิทยาศาสตร์ใช้เฉพาะในการทดลอง ส่วนเทคโนโลยีใช้เฉพาะในการผลิต"], "a": 2}, {"id": 7, "q": "นักเรียนสร้างถังเก็บน้ำและคำนวณความจุของถังก่อนสร้างจริง การดำเนินการดังกล่าวสัมพันธ์กับศาสตร์ใดมากที่สุด", "choices": ["สังคมศาสตร์ เพราะต้องศึกษาพฤติกรรมของผู้ใช้งาน", "ศิลปศาสตร์ เพราะต้องคำนึงถึงความสวยงามของผลิตภัณฑ์", "เศรษฐศาสตร์ เพราะต้องพิจารณารายได้จากการจำหน่ายผลิตภัณฑ์", "คณิตศาสตร์ เพราะต้องคำนวณขนาด ปริมาตร และความจุของถัง"], "a": 4}, {"id": 8, "q": "จากแผนภาพ องค์ประกอบที่ตำแหน่ง A ควรเป็นข้อใด", "choices": ["ผลผลิตของระบบ", "ข้อมูลย้อนกลับ", "ตัวป้อนเข้าสู่ระบบ", "กระบวนการทำงาน"], "a": 4, "img": "fan"}, {"id": 9, "q": "ข้อใดเป็นตัวอย่างของการนำความรู้ทางวิทยาศาสตร์ไปพัฒนาเทคโนโลยี", "choices": ["การเลือกสีของผลิตภัณฑ์ให้ตรงกับความนิยมของผู้บริโภค", "การกำหนดราคาสินค้าจากต้นทุนและกำไรที่ต้องการ", "การนำความรู้เรื่องการถ่ายโอนความร้อนไปพัฒนาตู้เย็น", "การออกแบบบรรจุภัณฑ์ให้มีรูปทรงสวยงามและจดจำง่าย"], "a": 3}, {"id": 10, "q": "ข้อใดแสดงความสัมพันธ์ของเทคโนโลยีกับเศรษฐศาสตร์ได้ชัดเจนที่สุด", "choices": ["การวิเคราะห์ต้นทุนและความคุ้มค่าก่อนสร้างผลิตภัณฑ์", "การศึกษาปฏิกิริยาเคมีที่เกิดขึ้นภายในแบตเตอรี่", "การคำนวณพื้นที่ผิวของชิ้นส่วนก่อนนำไปประกอบ", "การออกแบบรูปลักษณ์ของผลิตภัณฑ์ให้มีความสวยงาม"], "a": 1}, {"id": 11, "q": "ในการออกแบบระบบรดน้ำต้นไม้อัตโนมัติ ความรู้เรื่องความชื้นของดินเกี่ยวข้องกับศาสตร์ใดโดยตรง", "choices": ["เศรษฐศาสตร์", "วิทยาศาสตร์", "ศิลปกรรมศาสตร์", "สังคมศาสตร์"], "a": 2}, {"id": 12, "q": "ข้อใดเป็นตัวอย่างของการบูรณาการความรู้หลายศาสตร์ในการพัฒนาเทคโนโลยี", "choices": ["ใช้ความรู้คณิตศาสตร์เพียงอย่างเดียวในการสร้างสะพาน", "ใช้หลักศิลปะเพียงอย่างเดียวในการออกแบบเครื่องจักร", "ใช้ข้อมูลด้านเศรษฐกิจเพียงอย่างเดียวในการสร้างหุ่นยนต์", "ใช้วิทยาศาสตร์ คณิตศาสตร์ และการออกแบบร่วมกันสร้างระบบให้น้ำ"], "a": 4}, {"id": 13, "q": "จากแผนภาพ ข้อใดจัดเป็น Input ของระบบเครื่องซักผ้า", "choices": ["เสื้อผ้าที่ผ่านการซักแล้ว", "การหมุนของถังซักภายในเครื่อง", "น้ำ ผงซักฟอก เสื้อผ้า และพลังงานไฟฟ้า", "การตรวจสอบความสะอาดหลังจากซักเสร็จ"], "a": 3, "img": "washer"}, {"id": 14, "q": "“Process” ในระบบทางเทคโนโลยีหมายถึงข้อใด", "choices": ["ผลที่ได้รับเมื่อระบบทำงานเสร็จสมบูรณ์", "ขั้นตอนที่เปลี่ยนตัวป้อนให้กลายเป็นผลผลิต", "ทรัพยากรที่ป้อนเข้าสู่ระบบก่อนเริ่มทำงาน", "ข้อมูลที่นำกลับมาใช้ตรวจสอบการทำงานของระบบ"], "a": 2}, {"id": 15, "q": "ข้อใดเป็น Output ของระบบเครื่องปั่นน้ำผลไม้", "choices": ["ผลไม้ น้ำ และพลังงานไฟฟ้าที่ป้อนเข้าสู่เครื่อง", "การหมุนของมอเตอร์และใบมีดภายในเครื่องปั่น", "น้ำผลไม้ปั่นที่ได้หลังจากกระบวนการทำงาน", "การพิจารณาความละเอียดของน้ำผลไม้หลังปั่น"], "a": 3}, {"id": 16, "q": "หน้าที่สำคัญของ Feedback ในระบบทางเทคโนโลยีคือข้อใด", "choices": ["นำข้อมูลผลการทำงานกลับมาใช้ควบคุมหรือปรับปรุงระบบ", "เพิ่มทรัพยากรที่ใช้เป็นตัวป้อนให้ระบบทำงานได้ตลอดเวลา", "เปลี่ยนพลังงานเข้าสู่ระบบให้กลายเป็นผลิตภัณฑ์โดยตรง", "แสดงผลผลิตสุดท้ายของระบบให้ผู้ใช้งานสามารถมองเห็น"], "a": 1}, {"id": 17, "q": "หากเซนเซอร์ตรวจพบว่าดินมีความชื้นเพียงพอ ระบบควรทำงานอย่างไร", "choices": ["เพิ่มปริมาณน้ำให้มากขึ้นเพื่อรักษาระดับความชื้น", "ส่งข้อมูลให้ชุดควบคุมสั่งหยุดหรือลดการทำงานของปั๊ม", "เปิดปั๊มน้ำตลอดเวลาโดยไม่ต้องใช้ข้อมูลจากเซนเซอร์", "เปลี่ยนข้อมูลความชื้นให้เป็นน้ำแล้วส่งไปยังหัวจ่ายน้ำ"], "a": 2, "img": "watering"}, {"id": 18, "q": "ข้อใดเป็นตัวอย่างของระบบที่มีข้อมูลย้อนกลับมาใช้ควบคุมการทำงานโดยอัตโนมัติ", "choices": ["พัดลมที่ผู้ใช้กดสวิตช์เปิดและปิดด้วยตนเอง", "เครื่องปิ้งขนมปังที่ทำงานตามเวลาที่ตั้งไว้เท่านั้น", "เครื่องปรับอากาศที่ตรวจอุณหภูมิแล้วปรับการทำงาน", "หลอดไฟที่เปิดเมื่อผู้ใช้กดสวิตช์และปิดเมื่อกดอีกครั้ง"], "a": 3}, {"id": 19, "q": "ถ้าหม้อหุงข้าวไฟฟ้าตรวจพบว่าอุณหภูมิสูงถึงระดับที่กำหนดแล้วเปลี่ยนเข้าสู่โหมดอุ่น ข้อมูลอุณหภูมิมีบทบาทใด", "choices": ["เป็นข้อมูลย้อนกลับสำหรับควบคุมการทำงานของระบบ", "เป็นผลผลิตสุดท้ายที่ผู้ใช้ต้องการจากระบบหุงข้าว", "เป็นตัวป้อนหลักที่ทำให้ข้าวเปลี่ยนจากดิบเป็นข้าวสุก", "เป็นกระบวนการที่ทำหน้าที่เปลี่ยนพลังงานไฟฟ้าเป็นความร้อน"], "a": 1}, {"id": 20, "q": "หากต้องการวิเคราะห์สาเหตุที่พัดลมไม่หมุน ขั้นตอนใดเหมาะสมที่สุด", "choices": ["เปลี่ยนพัดลมใหม่ทันทีโดยไม่ตรวจสอบอุปกรณ์ภายใน", "ตรวจสอบเฉพาะใบพัดเพราะเป็นส่วนที่มองเห็นได้ชัดที่สุด", "ตรวจสอบเฉพาะสวิตช์โดยไม่ต้องตรวจพลังงานหรือมอเตอร์", "ตรวจสอบตัวป้อน กระบวนการ และส่วนประกอบที่เกี่ยวข้องอย่างเป็นระบบ"], "a": 4}, {"id": 21, "q": "คำว่า “ระบบย่อย” หมายถึงข้อใด", "choices": ["ผลผลิตที่เกิดขึ้นหลังจากระบบทั้งหมดทำงานเสร็จ", "ปัจจัยภายนอกที่ไม่มีความสัมพันธ์กับระบบหลัก", "ส่วนหนึ่งของระบบใหญ่ที่มีหน้าที่เฉพาะและทำงานร่วมกับส่วนอื่น", "สิ่งที่ป้อนเข้าสู่ระบบก่อนเริ่มกระบวนการทำงานทุกครั้ง"], "a": 3}, {"id": 22, "q": "ข้อใดเป็นตัวอย่างของระบบย่อยภายในรถยนต์", "choices": ["ถนน ป้ายจราจร และสัญญาณไฟจราจร", "ผู้ขับขี่ ผู้โดยสาร และเจ้าหน้าที่จราจร", "น้ำมันเชื้อเพลิง อากาศ และสภาพภูมิอากาศ", "ระบบเบรก ระบบบังคับเลี้ยว และระบบส่งกำลัง"], "a": 4}, {"id": 23, "q": "หากระบบเบรกของรถยนต์ทำงานผิดปกติ ผลที่เกิดขึ้นแสดงให้เห็นหลักการใด", "choices": ["ระบบย่อยแต่ละระบบทำงานแยกจากกันอย่างสมบูรณ์", "ความผิดปกติของระบบย่อยหนึ่งอาจกระทบต่อระบบทั้งหมด", "ระบบหลักยังคงทำงานได้เหมือนเดิมไม่ว่าระบบย่อยจะเสียหรือไม่", "ระบบย่อยจะมีความสำคัญเฉพาะเมื่อเป็นอุปกรณ์อิเล็กทรอนิกส์"], "a": 2}, {"id": 24, "q": "ลำดับการพัฒนาเทคโนโลยีให้แสงสว่างดังกล่าวสะท้อนแนวคิดใดได้ดีที่สุด", "choices": ["เทคโนโลยีเปลี่ยนแปลงเพื่อตอบสนองความต้องการและเพิ่มประสิทธิภาพ", "เทคโนโลยีทุกชนิดจะมีขนาดเล็กลงเมื่อเวลาผ่านไปเสมอ", "เทคโนโลยีรุ่นใหม่จะไม่มีผลกระทบต่อสิ่งแวดล้อมทุกกรณี", "เทคโนโลยีรุ่นเก่าจะไม่สามารถนำกลับมาใช้งานได้อีก"], "a": 1, "img": "lights"}, {"id": 25, "q": "ประโยชน์สำคัญของการวิเคราะห์ระบบย่อยคือข้อใด", "choices": ["ช่วยหาจุดผิดปกติและปรับปรุงการทำงานของระบบได้ง่ายขึ้น", "ช่วยลดจำนวนระบบย่อยให้เหลือเพียงระบบเดียวในทุกกรณี", "ช่วยให้ไม่จำเป็นต้องศึกษาความสัมพันธ์ของส่วนประกอบต่าง ๆ", "ช่วยทำให้ระบบสามารถทำงานได้โดยไม่ต้องใช้พลังงานหรือข้อมูล"], "a": 1}, {"id": 26, "q": "เครื่องซักผ้าอัตโนมัติมีระบบควบคุม ระบบน้ำ ระบบมอเตอร์ และระบบระบายน้ำ ข้อใดอธิบายความสัมพันธ์ได้ถูกต้องที่สุด", "choices": ["แต่ละระบบทำงานแยกกันโดยไม่ส่งผลต่อระบบอื่น", "ระบบควบคุมมีหน้าที่แทนระบบย่อยทั้งหมดภายในเครื่อง", "ระบบย่อยต่าง ๆ ต้องประสานการทำงานเพื่อให้การซักเสร็จสมบูรณ์", "ระบบน้ำเป็นระบบเดียวที่จำเป็น ส่วนระบบอื่นไม่มีผลต่อการทำงาน"], "a": 3}, {"id": 27, "q": "หากปั๊มน้ำของเครื่องซักผ้าไม่สามารถระบายน้ำออกได้ ผลใดมีแนวโน้มเกิดขึ้นมากที่สุด", "choices": ["เครื่องสามารถซักต่อได้ตามปกติโดยไม่เกิดความผิดปกติ", "ระบบอื่นจะทำงานเร็วขึ้นเพื่อชดเชยระบบระบายน้ำ", "เครื่องจะสร้างน้ำขึ้นมาใหม่เพื่อทดแทนน้ำที่ระบายไม่ได้", "ขั้นตอนต่อไปของการซักอาจไม่สามารถดำเนินการได้ตามปกติ"], "a": 4}, {"id": 28, "q": "ข้อใดเป็นสาเหตุที่ทำให้เทคโนโลยีเกิดการเปลี่ยนแปลง", "choices": ["มนุษย์มีความต้องการเหมือนเดิมและไม่มีปัญหาใหม่เกิดขึ้น", "ความต้องการ สภาพสังคม ความรู้ และข้อจำกัดมีการเปลี่ยนแปลง", "ผลิตภัณฑ์ทุกชนิดสามารถตอบสนองความต้องการได้อย่างสมบูรณ์", "การพัฒนาเทคโนโลยีไม่เกี่ยวข้องกับสภาพเศรษฐกิจหรือสิ่งแวดล้อม"], "a": 2}, {"id": 29, "q": "การพัฒนาโทรศัพท์จากโทรศัพท์บ้านสู่สมาร์ตโฟนเกิดขึ้นจากปัจจัยใดเด่นชัดที่สุด", "choices": ["ความต้องการสื่อสารและเข้าถึงข้อมูลได้สะดวกมากขึ้น", "ความต้องการลดจำนวนผู้ใช้อินเทอร์เน็ตในชีวิตประจำวัน", "ความต้องการเพิ่มขนาดของอุปกรณ์สื่อสารให้ใหญ่ขึ้น", "ความต้องการใช้โทรศัพท์สำหรับสนทนาด้วยเสียงเพียงอย่างเดียว"], "a": 1}, {"id": 30, "q": "ข้อใดเป็นผลกระทบเชิงบวกของเทคโนโลยีต่อสังคม", "choices": ["ทำให้ทุกคนจำเป็นต้องซื้ออุปกรณ์รุ่นใหม่ตลอดเวลา", "ทำให้ข้อมูลส่วนบุคคลถูกเผยแพร่ได้โดยไม่ต้องควบคุม", "ทำให้ความเหลื่อมล้ำในการเข้าถึงเทคโนโลยีหมดไปโดยสมบูรณ์", "ทำให้การสื่อสารและการเข้าถึงข้อมูลทำได้รวดเร็วยิ่งขึ้น"], "a": 4}, {"id": 31, "q": "ข้อใดเป็นการวิเคราะห์ผลกระทบของการใช้โดรนในการเกษตรได้ครอบคลุมที่สุด", "choices": ["โดรนมีแต่ประโยชน์เพราะช่วยลดเวลาในการทำงานของเกษตรกร", "โดรนมีแต่ข้อเสียเพราะทำให้มนุษย์ไม่ต้องทำงานด้วยตนเอง", "โดรนช่วยเพิ่มประสิทธิภาพ แต่ต้องคำนึงถึงต้นทุนและความปลอดภัย", "โดรนไม่มีผลต่อสิ่งแวดล้อมเพราะทำงานอยู่เหนือพื้นดินเท่านั้น"], "a": 3, "img": "drone"}, {"id": 32, "q": "ข้อใดเป็นผลกระทบเชิงลบของการใช้เทคโนโลยีดิจิทัล", "choices": ["ผู้เรียนสามารถค้นหาความรู้จากแหล่งข้อมูลได้สะดวก", "อาจเกิดการละเมิดข้อมูลส่วนบุคคลและการเผยแพร่ข้อมูลเท็จ", "ผู้ประกอบการสามารถติดต่อกับลูกค้าได้หลายช่องทาง", "บุคคลสามารถติดต่อสื่อสารข้ามพื้นที่ได้อย่างรวดเร็ว"], "a": 2}, {"id": 33, "q": "การนำหุ่นยนต์มาใช้ในโรงงานอุตสาหกรรมมีผลกระทบต่อเศรษฐกิจอย่างไร", "choices": ["ช่วยเพิ่มประสิทธิภาพการผลิต แต่แรงงานอาจต้องพัฒนาทักษะใหม่", "ทำให้ต้นทุนการผลิตของทุกโรงงานเพิ่มขึ้นในทุกสถานการณ์", "ทำให้โรงงานไม่จำเป็นต้องใช้บุคลากรในการทำงานอีกต่อไป", "ทำให้ผลิตภัณฑ์ทุกชนิดมีราคาถูกลงโดยไม่มีปัจจัยอื่นเกี่ยวข้อง"], "a": 1}, {"id": 34, "q": "ข้อใดเป็นผลกระทบเชิงบวกของเทคโนโลยีต่อสิ่งแวดล้อม", "choices": ["การเพิ่มปริมาณขยะอิเล็กทรอนิกส์จากอุปกรณ์ที่หมดอายุ", "การนำระบบตรวจวัดคุณภาพอากาศมาใช้เฝ้าระวังมลพิษ", "การใช้ทรัพยากรธรรมชาติจำนวนมากในการผลิตอุปกรณ์", "การปล่อยของเสียจากกระบวนการผลิตโดยไม่มีระบบบำบัด"], "a": 2}, {"id": 35, "q": "ข้อใดเป็นปัญหาสิ่งแวดล้อมที่อาจเกิดจากการเปลี่ยนอุปกรณ์อิเล็กทรอนิกส์บ่อยครั้ง", "choices": ["ทำให้จำนวนแหล่งพลังงานหมุนเวียนเพิ่มขึ้นอย่างรวดเร็ว", "ทำให้ผู้ใช้มีความรู้เกี่ยวกับการรีไซเคิลเพิ่มขึ้นเสมอ", "ทำให้เกิดระบบขนส่งสาธารณะที่มีประสิทธิภาพมากขึ้น", "ทำให้ปริมาณขยะอิเล็กทรอนิกส์และการใช้ทรัพยากรเพิ่มขึ้น"], "a": 4}, {"id": 36, "q": "ก่อนเลือกใช้เทคโนโลยีเพื่อแก้ปัญหา ควรพิจารณาสิ่งใดเหมาะสมที่สุด", "choices": ["เลือกเทคโนโลยีที่มีราคาสูงที่สุดเพื่อให้มั่นใจว่ามีคุณภาพ", "เลือกเทคโนโลยีที่มีผู้ใช้งานมากที่สุดโดยไม่ต้องศึกษาข้อมูล", "พิจารณาประโยชน์ ความคุ้มค่า ความปลอดภัย และผลกระทบรอบด้าน", "พิจารณาเฉพาะความสะดวกของผู้ใช้โดยไม่ต้องคำนึงถึงสิ่งแวดล้อม"], "a": 3}, {"id": 37, "q": "เซนเซอร์อุณหภูมิในแผนภาพทำหน้าที่ใด", "choices": ["เปลี่ยนพลังงานไฟฟ้าให้กลายเป็นอากาศเย็นโดยตรง", "ทำหน้าที่เป็นผลผลิตหลักที่ผู้ใช้ต้องการจากระบบ", "ตรวจวัดผลการทำงานและส่งข้อมูลกลับไปยังระบบควบคุม", "ทำหน้าที่เป็นพลังงานป้อนเข้าสู่ระบบแทนกระแสไฟฟ้า"], "a": 3, "img": "ac"}, {"id": 38, "q": "นักเรียนพบว่าระบบรดน้ำอัตโนมัติรดน้ำแม้ว่าดินเปียกอยู่แล้ว ควรตรวจสอบส่วนใดเป็นอันดับต้น ๆ", "choices": ["สีและรูปทรงของถังเก็บน้ำ", "ขนาดของพื้นที่ปลูกทั้งหมด", "จำนวนต้นไม้ที่ปลูกในบริเวณนั้น", "เซนเซอร์ความชื้นและระบบควบคุม"], "a": 4}, {"id": 39, "q": "ข้อใดแสดงถึงการใช้เทคโนโลยีอย่างรับผิดชอบ", "choices": ["เลือกใช้เทคโนโลยีที่เหมาะสมและคำนึงถึงผลกระทบที่อาจเกิดขึ้น", "เปลี่ยนอุปกรณ์ใหม่ทุกครั้งเมื่อมีรุ่นล่าสุดออกจำหน่าย", "ใช้ทรัพยากรให้มากที่สุดเพื่อเพิ่มประสิทธิภาพการผลิต", "เลือกผลิตภัณฑ์จากความทันสมัยโดยไม่พิจารณาความจำเป็น"], "a": 1}, {"id": 40, "q": "ข้อใดสรุปแนวคิดของ “ระบบทางเทคโนโลยี” ได้สมบูรณ์ที่สุด", "choices": ["เทคโนโลยีเป็นเครื่องมือที่สามารถทำงานได้โดยไม่ต้องมีองค์ประกอบอื่น", "เทคโนโลยีประกอบด้วยองค์ประกอบที่สัมพันธ์กันเพื่อให้บรรลุเป้าหมาย", "เทคโนโลยีทุกระบบต้องมีคอมพิวเตอร์และอินเทอร์เน็ตเป็นส่วนประกอบ", "เทคโนโลยีจะมีประสิทธิภาพเมื่อมีอุปกรณ์จำนวนมากที่สุดในระบบ"], "a": 2}];
+
+const SVG = {
+fan:`<div class="illustration"><svg viewBox="0 0 700 180" role="img" aria-label="แผนภาพพลังงานไฟฟ้าเข้าสู่ A แล้วได้ลมจากพัดลม">
+<defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4868b8"/></marker></defs>
+<rect x="30" y="55" rx="18" width="180" height="70" fill="#e8f2ff"/><text x="120" y="98" text-anchor="middle" font-size="24" fill="#1d477f">พลังงานไฟฟ้า</text>
+<line x1="220" y1="90" x2="300" y2="90" stroke="#4868b8" stroke-width="5" marker-end="url(#arr)"/>
+<rect x="315" y="40" rx="20" width="100" height="100" fill="#ede7ff"/><text x="365" y="100" text-anchor="middle" font-size="38" font-weight="700" fill="#6b4fc4">A</text>
+<line x1="430" y1="90" x2="510" y2="90" stroke="#4868b8" stroke-width="5" marker-end="url(#arr)"/>
+<rect x="525" y="55" rx="18" width="145" height="70" fill="#e8f7ef"/><text x="597" y="98" text-anchor="middle" font-size="24" fill="#25734d">ลมจากพัดลม</text></svg></div>`,
+washer:`<div class="illustration"><svg viewBox="0 0 760 250">
+<defs><marker id="a2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4969b9"/></marker></defs>
+<rect x="20" y="30" rx="18" width="210" height="185" fill="#eef4ff"/>
+<text x="125" y="70" text-anchor="middle" font-size="23" font-weight="700" fill="#234c88">น้ำ • ผงซักฟอก</text><text x="125" y="112" text-anchor="middle" font-size="23" fill="#234c88">เสื้อผ้า</text><text x="125" y="154" text-anchor="middle" font-size="23" fill="#234c88">พลังงานไฟฟ้า</text><text x="125" y="195" text-anchor="middle" font-size="18" fill="#71809c">INPUT</text>
+<line x1="240" y1="122" x2="315" y2="122" stroke="#4969b9" stroke-width="5" marker-end="url(#a2)"/>
+<rect x="330" y="45" rx="20" width="170" height="155" fill="#eee8ff"/><circle cx="415" cy="125" r="48" fill="#fff" stroke="#7758d7" stroke-width="8"/><text x="415" y="220" text-anchor="middle" font-size="20" fill="#5e49b5">เครื่องซักผ้า</text>
+<line x1="510" y1="122" x2="585" y2="122" stroke="#4969b9" stroke-width="5" marker-end="url(#a2)"/>
+<rect x="600" y="65" rx="18" width="140" height="115" fill="#e9f8ef"/><text x="670" y="112" text-anchor="middle" font-size="21" fill="#267650">เสื้อผ้าที่</text><text x="670" y="144" text-anchor="middle" font-size="21" fill="#267650">ผ่านการซัก</text></svg></div>`,
+watering:`<div class="illustration"><svg viewBox="0 0 760 180">
+<defs><marker id="a3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4e68b8"/></marker></defs>
+${["เซนเซอร์ความชื้น","ชุดควบคุม","ปั๊มน้ำ","หัวจ่ายน้ำ","ต้นไม้"].map((t,i)=>`<rect x="${20+i*148}" y="55" rx="16" width="125" height="70" fill="${i%2?'#eee8ff':'#e8f3ff'}"/><text x="${82+i*148}" y="98" text-anchor="middle" font-size="18" fill="#274a7e">${t}</text>${i<4?`<line x1="${146+i*148}" y1="90" x2="${163+i*148}" y2="90" stroke="#4e68b8" stroke-width="4" marker-end="url(#a3)"/>`:''}`).join('')}</svg></div>`,
+lights:`<div class="illustration"><svg viewBox="0 0 760 210">
+<defs><marker id="a4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4e68b8"/></marker></defs>
+${["ตะเกียง","หลอดไส้","ฟลูออเรสเซนต์","LED"].map((t,i)=>`<circle cx="${95+i*190}" cy="85" r="52" fill="${['#fff3d8','#fff0d6','#eaf8ff','#eef8e8'][i]}" stroke="#d6e0f0" stroke-width="3"/><text x="${95+i*190}" y="92" text-anchor="middle" font-size="22" font-weight="700" fill="#35527f">${t}</text><text x="${95+i*190}" y="165" text-anchor="middle" font-size="16" fill="#6d7a90">ยุค ${i+1}</text>${i<3?`<line x1="${150+i*190}" y1="85" x2="${215+i*190}" y2="85" stroke="#4e68b8" stroke-width="5" marker-end="url(#a4)"/>`:''}`).join('')}</svg></div>`,
+drone:`<div class="illustration"><svg viewBox="0 0 760 260">
+<rect width="760" height="260" rx="18" fill="#eef8ff"/><rect y="176" width="760" height="84" fill="#dff2d6"/>
+<path d="M0 220 Q120 165 240 220 T480 220 T760 220" fill="none" stroke="#7bb76c" stroke-width="5"/>
+<g transform="translate(330,70)"><rect x="0" y="35" width="100" height="28" rx="10" fill="#6048b7"/><line x1="15" y1="35" x2="-40" y2="0" stroke="#334a75" stroke-width="5"/><line x1="85" y1="35" x2="140" y2="0" stroke="#334a75" stroke-width="5"/><line x1="15" y1="63" x2="-40" y2="98" stroke="#334a75" stroke-width="5"/><line x1="85" y1="63" x2="140" y2="98" stroke="#334a75" stroke-width="5"/><ellipse cx="-42" cy="0" rx="42" ry="7" fill="#92a8d1"/><ellipse cx="142" cy="0" rx="42" ry="7" fill="#92a8d1"/><ellipse cx="-42" cy="98" rx="42" ry="7" fill="#92a8d1"/><ellipse cx="142" cy="98" rx="42" ry="7" fill="#92a8d1"/><circle cx="50" cy="49" r="12" fill="#fff"/></g>
+<g fill="#4ea4e8" opacity=".65">${[320,350,380,410,440].map((x,i)=>`<circle cx="${x}" cy="${155+i%2*10}" r="5"/>`).join('')}</g>
+<text x="380" y="235" text-anchor="middle" font-size="22" fill="#315d45">โดรนเกษตรเหนือพื้นที่เพาะปลูก</text></svg></div>`,
+ac:`<div class="illustration"><svg viewBox="0 0 760 300">
+<defs><marker id="a5" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4e68b8"/></marker></defs>
+<rect x="30" y="35" rx="18" width="210" height="80" fill="#e8f2ff"/><text x="135" y="68" text-anchor="middle" font-size="19" fill="#294d84">อุณหภูมิที่ตั้งไว้</text><text x="135" y="98" text-anchor="middle" font-size="19" fill="#294d84">+ พลังงานไฟฟ้า</text>
+<line x1="245" y1="75" x2="315" y2="75" stroke="#4e68b8" stroke-width="5" marker-end="url(#a5)"/>
+<rect x="330" y="30" rx="18" width="170" height="90" fill="#eee8ff"/><text x="415" y="82" text-anchor="middle" font-size="22" fill="#6049b4">ระบบทำความเย็น</text>
+<line x1="505" y1="75" x2="575" y2="75" stroke="#4e68b8" stroke-width="5" marker-end="url(#a5)"/>
+<rect x="590" y="35" rx="18" width="140" height="80" fill="#e8f7ef"/><text x="660" y="68" text-anchor="middle" font-size="18" fill="#26714e">อุณหภูมิห้อง</text><text x="660" y="95" text-anchor="middle" font-size="18" fill="#26714e">ลดลง</text>
+<rect x="500" y="190" rx="18" width="190" height="65" fill="#fff3dd"/><text x="595" y="230" text-anchor="middle" font-size="20" fill="#8c611d">เซนเซอร์อุณหภูมิ</text>
+<path d="M660 120 L660 190 M500 222 C390 222 360 175 390 120" fill="none" stroke="#d18b29" stroke-width="5" marker-end="url(#a5)"/><text x="405" y="250" font-size="17" fill="#8c611d">Feedback</text></svg></div>`
+};
+
+let state = {name:"",answers:{},index:0,startTime:null,order:[]};
+let tick;
+
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a}
+function save(){localStorage.setItem("techPretestM4",JSON.stringify(state))}
+function clearSave(){localStorage.removeItem("techPretestM4")}
+function byId(id){return document.getElementById(id)}
+function show(id){["start","quiz","result"].forEach(x=>byId(x).classList.add("hidden"));byId(id).classList.remove("hidden")}
+function elapsed(){return Math.max(0,Math.floor((Date.now()-state.startTime)/1000))}
+function fmt(sec){const m=Math.floor(sec/60),s=sec%60;return `${m} นาที ${String(s).padStart(2,"0")} วินาที`}
+function timerText(){const s=elapsed(),m=Math.floor(s/60),r=s%60;byId("timer").textContent=`เวลา ${String(m).padStart(2,"0")}:${String(r).padStart(2,"0")}`}
+function currentQ(){return QUESTIONS.find(q=>q.id===state.order[state.index])}
+
+function render(){
+  const q=currentQ(); const total=QUESTIONS.length; const answered=Object.keys(state.answers).length;
+  byId("topName").textContent=`ชื่อ: ${state.name}`;
+  byId("qcount").textContent=`ข้อ ${state.index+1} / ${total}`;
+  const p=Math.round(((state.index+1)/total)*100);
+  byId("pct").textContent=`${p}%`;
+  byId("bar").style.width=p+"%";
+  byId("qtext").textContent=q.q;
+  byId("imageBox").innerHTML=q.img?SVG[q.img]:"";
+  byId("choices").innerHTML=q.choices.map((c,i)=>{
+    const n=i+1,sel=state.answers[q.id]===n?" selected":"";
+    return `<button class="choice${sel}" onclick="pick(${n})"><span class="num">${n}</span><span>${c}</span></button>`
+  }).join("");
+  byId("prevBtn").disabled=state.index===0;
+  byId("prevBtn").style.opacity=state.index===0?".45":"1";
+  byId("nextBtn").textContent=state.index===total-1?"ตรวจสอบและส่งคำตอบ":"ถัดไป →";
+  byId("navgrid").innerHTML=state.order.map((id,i)=>{
+    let cl="nbtn"; if(state.answers[id])cl+=" done"; if(i===state.index)cl+=" current";
+    return `<button class="${cl}" onclick="go(${i})">${i+1}</button>`
+  }).join("");
+  save();
+}
+window.pick=function(n){state.answers[currentQ().id]=n;render()}
+window.go=function(i){state.index=i;render();window.scrollTo({top:0,behavior:"smooth"})}
+
+function openModal(title,body,buttons){
+  byId("modalTitle").textContent=title;byId("modalBody").innerHTML=body;
+  byId("modalActions").innerHTML="";
+  buttons.forEach(b=>{const x=document.createElement("button");x.className="btn "+(b.primary?"btn-primary":"btn-secondary");x.textContent=b.text;x.onclick=b.fn;byId("modalActions").appendChild(x)});
+  byId("modal").classList.add("show");
+}
+function closeModal(){byId("modal").classList.remove("show")}
+
+function startNew(){
+  const n=byId("studentName").value.trim();
+  if(!n){openModal("กรุณากรอกชื่อ–สกุล","ต้องกรอกชื่อก่อนเริ่มทำแบบทดสอบ",[{text:"ตกลง",primary:true,fn:closeModal}]);return}
+  state={name:n,answers:{},index:0,startTime:Date.now(),order:shuffle(QUESTIONS.map(q=>q.id))};
+  save();show("quiz");render();timerText();clearInterval(tick);tick=setInterval(timerText,1000)
+}
+function submitCheck(){
+  const missing=state.order.filter(id=>!state.answers[id]);
+  if(missing.length){
+    const positions=missing.map(id=>state.order.indexOf(id)+1);
+    openModal(`คุณยังตอบไม่ครบ ${missing.length} ข้อ`,`ข้อที่ยังไม่ได้ตอบ: <b>${positions.join(", ")}</b>`,[
+      {text:"กลับไปทำต่อ",primary:true,fn:()=>{closeModal();go(state.order.indexOf(missing[0]))}}
+    ]);return;
+  }
+  openModal("ยืนยันส่งคำตอบหรือไม่?","เมื่อตรวจคำตอบแล้ว ระบบจะแสดงเฉพาะคะแนนรวมและไม่แสดงเฉลย",[
+    {text:"ยกเลิก",fn:closeModal},{text:"ส่งคำตอบ",primary:true,fn:finish}
+  ]);
+}
+function finish(){
+  closeModal();clearInterval(tick);
+  const sec=elapsed();
+  const score=QUESTIONS.reduce((s,q)=>s+(state.answers[q.id]===q.a?1:0),0);
+  const pct=Math.round(score/QUESTIONS.length*100);
+  const level=pct>=90?"ยอดเยี่ยม":pct>=80?"ดีมาก":pct>=70?"ดี":pct>=60?"พอใช้":"ควรทบทวนเพิ่มเติม";
+  byId("resultName").textContent=state.name;
+  byId("scoreMain").textContent=`${score} / 40`;
+  byId("percentMain").textContent=`${pct}%`;
+  byId("scoreRing").style.setProperty("--pct",pct+"%");
+  byId("levelText").textContent=level;
+  byId("submittedAt").textContent=new Date().toLocaleString("th-TH",{dateStyle:"medium",timeStyle:"short"});
+  byId("duration").textContent=fmt(sec);
+  clearSave();show("result");window.scrollTo({top:0,behavior:"smooth"});
+}
+byId("startBtn").onclick=startNew;
+byId("prevBtn").onclick=()=>{if(state.index>0){state.index--;render();window.scrollTo({top:0,behavior:"smooth"})}};
+byId("nextBtn").onclick=()=>{if(state.index<QUESTIONS.length-1){state.index++;render();window.scrollTo({top:0,behavior:"smooth"})}else submitCheck()};
+byId("shotBtn").onclick=()=>{document.body.classList.toggle("screenshot");byId("shotBtn").textContent=document.body.classList.contains("screenshot")?"ออกจากโหมดแคป":"แสดงผลเต็มจอสำหรับแคป"};
+byId("restartBtn").onclick=()=>{document.body.classList.remove("screenshot");show("start");byId("studentName").value="";};
+
+(function restore(){
+  const raw=localStorage.getItem("techPretestM4");
+  if(!raw)return;
+  try{
+    const old=JSON.parse(raw);
+    if(old && old.name && old.startTime && old.order?.length===40){
+      openModal("พบแบบทดสอบที่ยังทำไม่เสร็จ","ต้องการทำต่อจากครั้งก่อนหรือเริ่มใหม่?",[
+        {text:"เริ่มใหม่",fn:()=>{clearSave();closeModal()}},
+        {text:"ทำต่อ",primary:true,fn:()=>{state=old;closeModal();show("quiz");render();timerText();tick=setInterval(timerText,1000)}}
+      ]);
+    }
+  }catch(e){clearSave()}
+})();
+</script>
+</body>
+</html>
